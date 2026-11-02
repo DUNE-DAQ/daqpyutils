@@ -75,7 +75,7 @@ select = [
   "UP",     # pyupgrade: suggestions for code modernization
   "RUF",    # Ruff-specific rules: built-in Ruff-specific warnings
   "ANN",    # flake8-annotations: check for missing type annotations
-{%- if STRICT %}
+{% if STRICT %}
   "S",      # flake8-bandit: check for common security issues
   "N",      # pep8-naming: check for PEP 8 naming conventions
   "ERA",    # eradicate: find and remove commented-out code
