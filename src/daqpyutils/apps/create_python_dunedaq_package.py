@@ -58,9 +58,13 @@ def summary_logging(package_name: str, needs_description: bool) -> None:
         )
     log.warning(
         "\tGet in touch with John Freeman and Andrew Mogan for review before they "
-        "include it in the DUNEDAQ organization."
+        "include it in the DUNE-DAQ organization."
     )
-
+    log.warning(
+        "\n\n[italic]n.b.[/italic] The [yellow]WARNING[/yellow], [red]ERROR[/red] and [grey70 on red]CRITICAL[/grey70 on red] "
+        "messages above do *not* necessarily indicate a problem; \nthey're used to define "
+        "the relative importance of the message involved.\n"
+        )
 
 @click.command(context_settings={"help_option_names": ["-h", "--help"]})
 @click.argument("package-name", nargs=1, type=str)
