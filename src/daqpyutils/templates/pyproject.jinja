@@ -7,7 +7,7 @@ name = "{{ PACKAGE_NAME }}"
 description = "{{ DESCRIPTION }}"
 version = "0.1.0"
 readme = "docs/README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 {%- if DEPENDENCIES %}
 dependencies = [
 {{ DEPENDENCIES }}
@@ -19,15 +19,6 @@ dev = [
   "pytest",
   "pytest-cov",
   "ruff",
-  "pre-commit",
-  {% if STRICT -%}
-  "pytest-mypy",
-  {%- endif %}
-]
-# TODO - discuss this. This could be used for coverage testing in the CI dashboard, SWIT input required.
-test = [
-  "pytest",
-  "pytest-cov",
   {% if STRICT -%}
   "pytest-mypy",
   {%- endif %}
@@ -48,12 +39,12 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 addopts = "-v{% if STRICT %} --mypy{% endif %} --cov={{ PACKAGE_NAME }} --cov-report=html --doctest-modules --ignore=docs/{% if APPLICATIONS %} --ignore=src/{{ PACKAGE_NAME }}/apps/{% endif %}"
-norecursedirs = [".git", ".github", "venv"]
+norecursedirs = [".git", ".github", ".venv"]
 testpaths = ["tests"]
 
 [tool.coverage.run]
 source = [ "{{ PACKAGE_NAME }}" ]
-omit = ["tests/*"]
+omit = ["tests/*", "scripts/*"]
 
 {% if STRICT -%}
 [tool.ruff]
@@ -75,6 +66,7 @@ select = [
   "UP",     # pyupgrade: suggestions for code modernization
   "RUF",    # Ruff-specific rules: built-in Ruff-specific warnings
   "ANN",    # flake8-annotations: check for missing type annotations
+  "R",      # refactoring suggestions
 {% if STRICT %}
   "S",      # flake8-bandit: check for common security issues
   "N",      # pep8-naming: check for PEP 8 naming conventions

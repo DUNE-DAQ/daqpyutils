@@ -62,7 +62,7 @@ def summary_logging(package_name: str, needs_description: bool) -> None:
     )
     log.warning(
         "\n\n[italic]n.b.[/italic] The [yellow]WARNING[/yellow], [red]ERROR[/red] and [grey70 on red]CRITICAL[/grey70 on red] "
-        "messages above do *not* necessarily indicate a problem; \nthey're used to define "
+        "labels above do *not* necessarily indicate a problem; \nthey're used to define "
         "the relative importance of the message involved.\n"
         )
 
