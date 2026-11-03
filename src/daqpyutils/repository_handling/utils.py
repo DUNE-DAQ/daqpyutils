@@ -398,7 +398,11 @@ def setup_dot_git(package_path: Path) -> None:
     If it doesn't exist, it gets written.
     """ 
     log.info("Setting up the .git repository.")
-    Repo.init(package_path, mkdir=True)
+    repo = Repo.init(package_path, mkdir=True)
+
+    if not repo.head.is_valid():
+        repo.git.checkout("-b", "develop")
+
     return
 
 
