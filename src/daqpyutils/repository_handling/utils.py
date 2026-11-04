@@ -90,7 +90,7 @@ def item_is_formatted_with_version(item: str) -> bool:
     Raises:
         None
     """
-    return bool(re.match(r"^[a-zA-Z0-9_-]+==\d+\.\d+\.\d+$", item))
+    return bool(re.match(r"^[a-zA-Z0-9_-]+==[^=].*$", item))
 
 
 def item_is_formatted_in_kebab_case(item: str) -> bool:
