@@ -160,8 +160,7 @@ def main(
     if package_name == ".":
         log.error(
             "You passed '.' as the name of the package, which is not a valid package "
-            "name. Perhaps you meant to use the tool [green]"
-            "validate_python_dunedaq_package_structure[/]?"
+            "name."
         )
         sys.exit(1)
     package_path = Path.cwd() / package_name

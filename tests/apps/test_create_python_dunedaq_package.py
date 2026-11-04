@@ -57,11 +57,7 @@ def test_create_this_package() -> None:
     result = runner.invoke(create_python_dunedaq_package, ["."])
     output = strip_ansi(result.output)
     assert result.exit_code != 0
-    assert "You passed '.' as the name of the package" in output
-    assert (
-        "Perhaps you meant to use the tool validate_python_dunedaq_package_structure?"
-        in output
-    )
+    assert "You passed '.' as the name of the package, which is not a valid package name" in output
 
 
 def test_create_a_package_and_validate(tmp_path: Path) -> None:

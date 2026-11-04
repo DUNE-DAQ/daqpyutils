@@ -366,8 +366,7 @@ def validate_compliance_with_naming_conventions(
     """Validate the package names."""
     if package_name == ".":
         log.error(
-            "You passed '.' as the name of the package. Perhaps you meant to use the "
-            "tool validate_python_dunedaq_package_structure?"
+            "You passed '.' as the name of the package, which is not a valid package name."
         )
         sys.exit(1)
     if not re.fullmatch(r"[a-zA-Z][a-zA-Z0-9]*", package_name):
