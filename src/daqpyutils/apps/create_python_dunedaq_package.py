@@ -81,7 +81,7 @@ def summary_logging(package_name: str, needs_description: bool) -> None:
     "requirements_tuple",
     type=str,
     multiple=True,
-    help="Define requiements for the pyproject.toml as e.g. 'click'",
+    help="Add a required package in the pyproject.toml (e.g. 'click')",
 )
 @click.option(
     "-rf",
@@ -90,7 +90,7 @@ def summary_logging(package_name: str, needs_description: bool) -> None:
     type=str,
     multiple=False,  # If multiple are used in CLI, only the last instance is used.
     help=(
-        "Define requiements for the pyproject.toml by pointing to a requirements file "
+        "Define multiple required packages in the pyproject.toml by pointing to a requirements file "
         "(e.g. requirements.txt)."
     ),
 )
