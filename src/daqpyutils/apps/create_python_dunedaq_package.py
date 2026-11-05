@@ -121,7 +121,7 @@ def summary_logging(package_name: str, needs_description: bool) -> None:
     help="Package description for the pyproject.toml.",
 )
 @click.option(
-    "-s", "--strict", is_flag=True, help="Strict mode. Recommended for production code."
+    "-s", "--strict", is_flag=True, help="Strict mode. Adds extra tooling and constraints for the power developer."
 )
 def main(
     package_name: str,
