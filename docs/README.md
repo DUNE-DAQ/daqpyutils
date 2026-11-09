@@ -7,10 +7,10 @@ _"[daq-cmake](https://dune-daq-sw.readthedocs.io/en/latest/packages/daq-cmake/) 
 * Defines our development standards for Python packages
 
 * Table of Contents
-    * [1. `create-python-dunedaq-package`(#1-create-python-dunedaq-package)
-    * [2. Standard DUNE-DAQ Python Repo Layout](#2-package-layout)
-    * [3. `pyproject.toml`](#3-pyproject-toml)
-    * [4. External Visualization Tools](#4-visualization-tools)
+    * [1. `create-python-dunedaq-package`](#1-create-python-dunedaq-package)
+    * [2. Standard DUNE-DAQ Python Repo Layout](#2-standard-dune-daq-python-repo-layout)
+    * [3. `pyproject.toml`](#3-pyprojecttoml)
+    * [4. External Visualization Tools](#4-external-visualization-tools)
     * [5. Of Historical Interest](#5-of-historical-interest)
 
 ## 1. `create-python-dunedaq-package`
