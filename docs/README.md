@@ -4,9 +4,9 @@
     * [A Brief Overview](#a-brief-overview)
     * [`create-python-dunedaq-package`](#create-python-dunedaq-package)
     * [Standard DUNE-DAQ Python Repo Layout](#standard-dune-daq-python-repo-layout)
-    * [`pyproject.toml`](pyprojecttoml)
-    * [External Visualization Tools](external-visualization-tools)
-    * [Of Historical Interest](of-historical-interest)
+    * [`pyproject.toml`](#pyprojecttoml)
+    * [External Visualization Tools](#external-visualization-tools)
+    * [Of Historical Interest](#of-historical-interest)
 
 ## A Brief Overview
 
