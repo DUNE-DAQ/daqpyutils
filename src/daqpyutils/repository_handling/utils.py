@@ -470,42 +470,20 @@ def construct_default_gitignore(package_path: Path) -> None:
 
 
 def construct_default_dot_github(package_path: Path) -> None:
-    """Construct the default .github/workflows/*.yml with the default CI workflows."""
+    """Construct a minimal set of default .github/workflows/*.yml any repo in DUNE DAQ should have"""
     # Setup the default path
     template_dot_github_dir = template_path / "github"
 
     # Copy the workflow files to the destination
     template_workflow_dir = template_dot_github_dir / "workflows"
     workflow_files = [
-        template_workflow_dir / file.name
-        for file in template_workflow_dir.iterdir()
-        if file.is_file() and file.name != "__init__.py"
+        template_workflow_dir / filename
+        for filename in ["track_new_prs.yml", "track_new_issues.yml"]
     ]
-    log.critical("workflow_files: %s", workflow_files)
     destination = package_path / ".github" / "workflows"
     for file in workflow_files:
         copy_template(file, destination / file.name)
 
-    # Copy the issue template files to the destination
-    template_issue_template_dir = template_dot_github_dir / "ISSUE_TEMPLATE"
-    issue_template_files = [
-        template_issue_template_dir / file.name
-        for file in template_issue_template_dir.iterdir()
-        if file.is_file() and file.name != "__init__.py"
-    ]
-    log.critical("issue_template_files: %s", issue_template_files)
-    destination = package_path / ".github" / "ISSUE_TEMPLATE"
-    for file in issue_template_files:
-        copy_template(file, destination / file.name)
-
-    # Copy the pull request template files to the destination
-    template_pull_request_template_path = (
-        template_dot_github_dir / "pull_request_template.md"
-    )
-    destination = package_path / ".github" / "pull_request_template.md"
-    copy_template(template_pull_request_template_path, destination)
-
-    log.info("GitHub workflows copied to %s", destination)
     return
 
 
