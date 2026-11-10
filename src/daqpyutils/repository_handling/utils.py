@@ -487,7 +487,11 @@ def construct_default_dot_github(package_path: Path) -> None:
     return
 
 
+# JCF, Nov-10-2026: this function is disabled until we come up with a formal
+# standard for pre-commit hooks in Python development
+
 def construct_default_pre_commit_config_yaml(package_path: Path) -> None:
+    pass
     """Construct the default .pre-commit-config.yaml with all pre-commit actions."""
     copy_template("pre-commit-config.jinja", package_path / ".pre-commit-config.yaml")
     return
@@ -629,8 +633,8 @@ def make_files(
     log.debug("Creating [green].github/workflows[/green]")
     construct_default_dot_github(package_path)
 
-    log.debug("Creating [green].pre-commit-config.yaml[/green]")
-    construct_default_pre_commit_config_yaml(package_path)
+    #log.debug("Creating [green].pre-commit-config.yaml[/green]")
+    #construct_default_pre_commit_config_yaml(package_path)
 
     log.debug("Creating [green]pyproject.toml[/green]")
     construct_default_pyproject_toml(

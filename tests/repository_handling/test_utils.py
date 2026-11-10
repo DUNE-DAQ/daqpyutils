@@ -403,11 +403,14 @@ def test_construct_default_dot_github(tmp_path: Path) -> None:
     assert workflows_dir.exists() and workflows_dir.is_dir()
 
 
+# JCF, Nov-10-2026: for the time being we're leaving pre-commit logic out until we arrive at a standard
 def test_construct_default_pre_commit_config_yaml(tmp_path: Path) -> None:
     """
     Test the construct_default_pre_commit_config_yaml function by creating a temporary
     directory and checking if the .pre-commit-config.yaml file is created correctly.
     """  # noqa: D205
+    assert True
+    pass
     # Create a temporary directory
     temp_dir = tmp_path / "test_repo"
     temp_dir.mkdir()
