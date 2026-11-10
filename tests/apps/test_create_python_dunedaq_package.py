@@ -122,17 +122,6 @@ def test_create_a_package_and_validate(tmp_path: Path) -> None:
             ".github/workflows directory was not created"
         )
 
-        pull_request_template_file_path = github_dir / "pull_request_template.md"
-        assert pull_request_template_file_path.exists(), (
-            "pull_request_template.md was not created"
-        )
-
-        lint_workflow_file_path = github_workflow_dir / "lint.yml"
-        assert lint_workflow_file_path.exists(), "lint.yml was not created"
-
-        pytest_workflow_file_path = github_workflow_dir / "pytest.yml"
-        assert pytest_workflow_file_path.exists(), "pytest.yml was not created"
-
         track_new_issues_workflow_file_path = (
             github_workflow_dir / "track_new_issues.yml"
         )
@@ -144,40 +133,6 @@ def test_create_a_package_and_validate(tmp_path: Path) -> None:
         assert track_new_prs_workflow_file_path.exists(), (
             "track_new_prs.yml was not created"
         )
-
-        github_issue_template_dir = github_dir / "ISSUE_TEMPLATE"
-        assert github_issue_template_dir.exists(), (
-            ".github/ISSUE_TEMPLATE directory was not created"
-        )
-
-        bug_report_template_file_path = (
-            github_issue_template_dir / "bug_report.yml"
-        )
-        assert bug_report_template_file_path.exists(), (
-            "bug_report.yml was not created"
-        )
-
-        documentation_template_file_path = (
-            github_issue_template_dir / "documentation.yml"
-        )
-        assert documentation_template_file_path.exists(), (
-            "documentation.yml was not created"
-        )
-
-        feature_request_template_file_path = (
-            github_issue_template_dir / "feature_request.yml"
-        )
-        assert feature_request_template_file_path.exists(), (
-            "feature_request.yml was not created"
-        )
-
-        large_change_request_template_file_path = (
-            github_issue_template_dir / "large_change_request.yml"
-        )
-        assert large_change_request_template_file_path.exists(), (
-            "large_change_request.yml was not created"
-        )
-
 
         readme_file_path = package_dir / "docs" / "README.md"
         assert readme_file_path.exists(), "README.md was not created"

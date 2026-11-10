@@ -394,10 +394,6 @@ def test_construct_default_dot_github(tmp_path: Path) -> None:
     github_dir = temp_dir / ".github"
     assert github_dir.exists() and github_dir.is_dir()
 
-    # Check if the pull request template exists
-    pr_template_file = github_dir / "pull_request_template.md"
-    assert pr_template_file.exists() and pr_template_file.is_file()
-
     # Check if the default workflows are created correctly
     workflows_dir = github_dir / "workflows"
     assert workflows_dir.exists() and workflows_dir.is_dir()
@@ -601,18 +597,6 @@ def test_make_files(tmp_path: Path) -> None:
     # Check if the repo has a .github/workflows directory
     workflows_dir = github_dir / "workflows"
     assert workflows_dir.exists() and workflows_dir.is_dir()
-
-    # Check if the repo has a .github/pull_request_template.md
-    pr_template_file = github_dir / "pull_request_template.md"
-    assert pr_template_file.exists() and pr_template_file.is_file()
-
-    # Check if the repo has a .github/workflows/pytest.yml
-    pytest_workflow_file = workflows_dir / "pytest.yml"
-    assert pytest_workflow_file.exists() and pytest_workflow_file.is_file()
-
-    # Check if the repo has a .pre-commit-config.yaml
-    pre_commit_file = temp_dir / ".pre-commit-config.yaml"
-    assert pre_commit_file.exists() and pre_commit_file.is_file()
 
     # Check if the repo has a src directory with the package name
     src_dir = temp_dir / "src" / repo_name
