@@ -59,14 +59,16 @@ Options include:
 Note that the options `-r/--requirements` and `-a/--app` can be used
 multiple times, e.g. `-r click -r rich`. 
 
-### What to Do After Running
+### What to Do After Running the Command
 
 Once the skeleton repo has been generated, your first commit will
-automatically be onto the `develop` branch. You'll want to use git
-commands to define its central repo, likely your personal GitHub
-account for starters. Once you wish to have it added to the DUNE-DAQ
-GitHub organization, contact the members of Software Coordination
-(John Freeman and Andrew Mogan as of this writing, Nov-12-2026).
+automatically be onto the `develop` branch. Note that you'll want to
+assign an appropriate version number in the `pyproject.toml` and add
+some rudimentary documentation in `docs/README.md`. `git push` to
+remote in your private github account, and set up a new remote if you
+haven't already. Once you wish to have it added to the DUNE-DAQ GitHub
+organization, contact the members of Software Coordination (John
+Freeman and Andrew Mogan as of this writing, Nov-12-2026).
 
 ## Standard DUNE-DAQ Python Repo Layout
 

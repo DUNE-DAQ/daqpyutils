@@ -21,7 +21,7 @@ template_variables: dict[str, str | bool] = {}
 
 def summary_logging(package_name: str, needs_description: bool) -> None:
     """
-    Log future actions to comission the created package into the DUNE-DAQ organization.
+    Log future actions to commission the created package into the DUNE-DAQ organization.
 
     Summarize the package creation, and the remaining tasks required to integrate the
     package with the DUNE-DAQ github oragnization.
@@ -37,34 +37,15 @@ def summary_logging(package_name: str, needs_description: bool) -> None:
     Raises:
         None
     """
-    log.warning(
-        "[green]You have successfully created your package %s[/green]. To publish "
-        "it, you need to:",
-        package_name,
-    )
-    log.warning(
-        "\tAssign an appropriate [bold green]version number[/bold green] in the "
-        "pyproject.toml"
-    )
-    log.warning(
-        "\t[bold green]'git push`[/bold green] to remote in your private github, and "
-        "set up a new remote if you haven't already"
-    )
-    log.warning("\tCreate a pull request for your changes.")
-    log.warning("\tSet up your pytest-cov key.")
     if needs_description:
         log.warning(
             "\tAdd a [bold green]package description[/bold green] in the pyproject.toml"
         )
-    log.warning(
-        "\tGet in touch with John Freeman and Andrew Mogan for review before they "
-        "include it in the DUNE-DAQ organization."
+
+    log.info(
+        "[yellow]You have successfully created\nyour package %s. For next steps, please look at the \"What to Do\nAfter Running the Command\" section of the documentation at\nhttps://dune-daq-sw.readthedocs.io/en/latest/packages/daqpyutils/[/yellow]",
+        package_name,
     )
-    log.warning(
-        "\n\n[italic]n.b.[/italic] The [yellow]WARNING[/yellow], [red]ERROR[/red] and [grey70 on red]CRITICAL[/grey70 on red] "
-        "labels above do *not* necessarily indicate a problem; \nthey're used to define "
-        "the relative importance of the message involved.\n"
-        )
 
 @click.command(context_settings={"help_option_names": ["-h", "--help"]})
 @click.argument("package-name", nargs=1, type=str)

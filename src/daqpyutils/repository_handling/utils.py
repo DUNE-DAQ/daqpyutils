@@ -47,7 +47,7 @@ def validate_package(package_name: str) -> bool:
         url = f"https://pypi.org/pypi/{package_name}/json"
         response = requests.get(url, timeout=1)
         if response.status_code == 200:
-            log.info("Package '%s' exists on PyPI.", package_name)
+            log.debug("Package '%s' exists on PyPI.", package_name)
             return True
     except requests.exceptions.ConnectionError:
         log.exception(
@@ -335,7 +335,7 @@ def unpack_items(
 
     # If a file is provided, parse its contents and add them to the list
     if items_file:
-        log.info("Commencing parsing the contents of %s to list", items_file)
+        log.debug("Commencing parsing the contents of %s to list", items_file)
 
         # Validate that the file exists
         items_path = Path(items_file)
@@ -396,7 +396,7 @@ def setup_dot_git(package_path: Path) -> None:
     If it already exists, checks if it is correctly structured.
     If it doesn't exist, it gets written.
     """ 
-    log.info("Setting up the .git repository.")
+    log.debug("Setting up the .git repository.")
     repo = Repo.init(package_path, mkdir=True)
 
     if not repo.head.is_valid():
@@ -416,7 +416,7 @@ def make_subdirs(package_path: Path, applications: list[str]) -> None:
         create_subdirs.append(package_path / "src" / package_name / "apps")
     for subdir in create_subdirs:
         if not subdir.exists():
-            log.info("Generating directory %s", subdir)
+            log.debug("Generating directory %s", subdir)
             subdir.mkdir(parents=True)
     return
 
@@ -433,7 +433,7 @@ def populate_template(
     log.debug("Populating template [green]%s[/green]", template_file_path.name)
     with open(output_path, "w") as output_file:
         output_file.write(result)
-    log.info(
+    log.debug(
         "File [green]%s[/green] written to [purple]%s[/purple].",
         output_path.name,
         output_path,
@@ -447,7 +447,7 @@ def copy_template(file_name: Path | str, output_path: Path) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     log.debug("Copying template [green]%s[/green]", file_name)
     shutil.copy(template_file_path, output_path)
-    log.info(
+    log.debug(
         "File [green]%s[/green] written to [purple]%s[/purple].",
         output_path.name,
         output_path,
@@ -521,7 +521,7 @@ def parse_applications(package_path: Path, applications: list[str]) -> str:
             replace_file_path_with_dot_scope_notation(application_path) + ":main"
         )
         template_entry_points += f'{application} = "{application_entry_point}"\n'
-        log.info("Added application %s to pyproject.toml", application)
+        log.debug("Added application %s to pyproject.toml", application)
 
     return template_entry_points.rstrip("\n")
 
@@ -586,7 +586,7 @@ def construct_default_pyproject_toml(
         template_variables["APPLICATIONS"] = parse_applications(
             package_path, applications
         )
-        log.info("Added all script entry points")
+        log.debug("Added all script entry points")
 
     if requirements:
         requirements_str = "\n".join(f'\t"{pkg}",' for pkg in requirements)
@@ -607,10 +607,10 @@ def construct_inits(package_path: Path) -> None:
     ]
     directories.append(package_path / "src" / package_path.name)
     for directory in directories:
-        log.error("%s", directory)
         for exclusion_path in ["integtest", "github"]:
             if exclusion_path in str(directory):
                 continue
+        log.debug("Creating __init__.py file in %s", directory)
         file = directory / "__init__.py"
         file.touch()
     return
