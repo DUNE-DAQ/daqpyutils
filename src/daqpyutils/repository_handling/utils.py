@@ -1,3 +1,4 @@
+import datetime
 import re
 import shutil
 import sys
@@ -458,7 +459,8 @@ def copy_template(file_name: Path | str, output_path: Path) -> None:
 def construct_default_readme_md(package_path: Path, description: str) -> None:
     """Construct the default docs/README.md with the package name and description."""
     output_file = package_path / "docs" / "README.md"
-    template_variables = {"PACKAGE_NAME": package_path.name, "DESCRIPTION": description}
+    generation_blurb = "# No Official User Documentation Has Been Written Yet, %s" % (datetime.datetime.now().astimezone().strftime("%a %b %-d %H:%M:%S %Z %Y"))
+    template_variables = {"PACKAGE_NAME": package_path.name, "DESCRIPTION": description, "GENERATION_BLURB": generation_blurb }
     populate_template(template_path / "readme.jinja", template_variables, output_file)
     return
 
