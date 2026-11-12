@@ -167,7 +167,7 @@ def test_create_a_package_and_validate(tmp_path: Path) -> None:
 
         # 6. Verify output string
         output = strip_ansi(result.output)
-        assert "You have successfully created your package" in output
+        assert "You have successfully created" in output  # "your package" appears after the line break
 
         # 7. Pip install using the resolved absolute path of the sandbox directory
         absolute_package_dir = package_dir.resolve()
