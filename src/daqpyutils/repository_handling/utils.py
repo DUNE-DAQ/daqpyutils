@@ -476,7 +476,7 @@ def construct_default_gitignore(package_path: Path) -> None:
 
 
 def construct_default_dot_github(package_path: Path) -> None:
-    """Construct a minimal set of default .github/workflows/*.yml any repo in DUNE DAQ should have."""
+    """Construct the minimal set of workflows DUNE-DAQ repos should have."""
     # Setup the default path
     template_dot_github_dir = template_path / "github"
 
