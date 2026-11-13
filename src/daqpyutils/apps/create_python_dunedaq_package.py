@@ -43,7 +43,10 @@ def summary_logging(package_name: str, needs_description: bool) -> None:
         )
 
     log.info(
-        "[yellow]You have successfully created\nyour package %s. For next steps, please look at the \"What to Do\nAfter Running the Command\" section of the documentation at\nhttps://dune-daq-sw.readthedocs.io/en/latest/packages/daqpyutils/[/yellow]",
+        "[yellow]You have successfully created"
+        "\nyour package %s. For next steps, please look at the \"What to Do"
+        "\nAfter Running the Command\" section of the documentation at"
+        "\nhttps://dune-daq-sw.readthedocs.io/en/latest/packages/daqpyutils/[/yellow]",
         package_name,
     )
 
@@ -71,7 +74,8 @@ def summary_logging(package_name: str, needs_description: bool) -> None:
     type=str,
     multiple=False,  # If multiple are used in CLI, only the last instance is used.
     help=(
-        "Define multiple required packages in the pyproject.toml by pointing to a requirements file "
+        "Define multiple required packages in the pyproject.toml"
+        " by pointing to a requirements file "
         "(e.g. requirements.txt)."
     ),
 )
@@ -102,7 +106,8 @@ def summary_logging(package_name: str, needs_description: bool) -> None:
     help="Package description for the pyproject.toml.",
 )
 @click.option(
-    "-s", "--strict", is_flag=True, help="Strict mode. Adds extra tooling and constraints for the power developer."
+    "-s", "--strict", is_flag=True,
+    help="Strict mode. Adds extra tooling and constraints for the power developer."
 )
 def main(
     package_name: str,
@@ -140,8 +145,8 @@ def main(
     # Perform the common checks on the package name and path
     if package_name == ".":
         log.error(
-            "You passed '.' as the name of the package, which is not a valid package "
-            "name."
+            "You passed '.' as the name of the package,"
+            " which is not a valid package name."
         )
         sys.exit(1)
     package_path = Path.cwd() / package_name

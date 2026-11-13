@@ -156,9 +156,10 @@ The last component that is specified in `project` are the CLI entry points which
 
 ### `pytest` in `pyproject.toml`
 
-The configuration for `pytest`s is defined in the `pyproject.toml`, in
-the `[tool.pytest.ini_options]` options. By default, the tests are
-configured to use the following options:
+This can simply be run via the command `pytest` at the base of your
+repo. The configuration for `pytest`s is defined in the
+`pyproject.toml`, in the `[tool.pytest.ini_options]` options. By
+default, the tests are configured to use the following options:
 
  - `--cov=<package_name>`: Enables coverage measurement, tracking how much of that specific source code is executed during the test run.
  - `--cov-report=html`: Configures the format and output location of the coverage report.
@@ -175,7 +176,7 @@ And to use these settings:
 Outside of specifying the installation tool and the project structure, the `pyproject.toml` also contains the configuration of external tools that are used within the repository. The default ones specified in the template are defined as follows
 
 #### Ruff 
-Ruff is an extremely fast Python linter and code formatter, designed as a modern, high-performance replacement for older tools like `Flake8`, `isort`, and `Black`. The `google` documentation docstring convention has been chosen for its readability with both IDEs and terminals, as well as using clear sections for argument, return type, and raise descriptors to give the reader an easy and quick understanding of the purpose of the code. The default implementation of `ruff` has the following linting rules
+You can run this from the base of your repo via the command `ruff check .`. Ruff is an extremely fast Python linter and code formatter, designed as a modern, high-performance replacement for older tools like `Flake8`, `isort`, and `Black`. It can even attempt to automatically fix the problems it finds if you add the `--fix` option, i.e. `ruff check --fix .`. The `google` documentation docstring convention has been chosen for its readability with both IDEs and terminals, as well as using clear sections for argument, return type, and raise descriptors to give the reader an easy and quick understanding of the purpose of the code. The default implementation of `ruff` has the following linting rules
 
 Rules:
  - `D` - `pydocstyle`: check for docstring conventions

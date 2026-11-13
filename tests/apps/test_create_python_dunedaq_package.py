@@ -156,11 +156,6 @@ def test_create_a_package_and_validate(tmp_path: Path) -> None:
         unit_test_dir = package_dir / "tests"
         assert unit_test_dir.exists(), "tests/ directory was not created"
 
-        #pre_commit_config_file_path = package_dir / ".pre-commit-config.yaml"
-        #assert pre_commit_config_file_path.exists(), (
-        #    ".pre-commit-config.yaml was not created"
-        #)
-
         # 5. Verify file generation
         assert (package_dir / "src" / package_name / "__init__.py").exists()
         assert (package_dir / "src" / package_name / "apps" / "__init__.py").exists()

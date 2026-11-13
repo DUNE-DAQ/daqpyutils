@@ -367,7 +367,8 @@ def validate_compliance_with_naming_conventions(
     """Validate the package names."""
     if package_name == ".":
         log.error(
-            "You passed '.' as the name of the package, which is not a valid package name."
+            "You passed '.' as the name of the package, "
+            "which is not a valid package name."
         )
         sys.exit(1)
     if not re.fullmatch(r"[a-zA-Z][a-zA-Z0-9]*", package_name):
@@ -459,8 +460,11 @@ def copy_template(file_name: Path | str, output_path: Path) -> None:
 def construct_default_readme_md(package_path: Path, description: str) -> None:
     """Construct the default docs/README.md with the package name and description."""
     output_file = package_path / "docs" / "README.md"
-    generation_blurb = "# No Official User Documentation Has Been Written Yet, %s" % (datetime.datetime.now().astimezone().strftime("%a %b %-d %H:%M:%S %Z %Y"))
-    template_variables = {"PACKAGE_NAME": package_path.name, "DESCRIPTION": description, "GENERATION_BLURB": generation_blurb }
+    ds = datetime.datetime.now().astimezone().strftime("%a %b %-d %H:%M:%S %Z %Y")
+    generation_blurb = f"# No Official User Documentation Has Been Written Yet, {ds}"
+    template_variables = {"PACKAGE_NAME": package_path.name,
+                          "DESCRIPTION": description,
+                          "GENERATION_BLURB": generation_blurb }
     populate_template(template_path / "readme.jinja", template_variables, output_file)
     return
 
@@ -472,7 +476,7 @@ def construct_default_gitignore(package_path: Path) -> None:
 
 
 def construct_default_dot_github(package_path: Path) -> None:
-    """Construct a minimal set of default .github/workflows/*.yml any repo in DUNE DAQ should have"""
+    """Construct a minimal set of default .github/workflows/*.yml any repo in DUNE DAQ should have."""
     # Setup the default path
     template_dot_github_dir = template_path / "github"
 
@@ -493,8 +497,8 @@ def construct_default_dot_github(package_path: Path) -> None:
 # standard for pre-commit hooks in Python development
 
 def construct_default_pre_commit_config_yaml(package_path: Path) -> None:
-    pass
     """Construct the default .pre-commit-config.yaml with all pre-commit actions."""
+    pass
     copy_template("pre-commit-config.jinja", package_path / ".pre-commit-config.yaml")
     return
 
@@ -634,9 +638,6 @@ def make_files(
 
     log.debug("Creating [green].github/workflows[/green]")
     construct_default_dot_github(package_path)
-
-    #log.debug("Creating [green].pre-commit-config.yaml[/green]")
-    #construct_default_pre_commit_config_yaml(package_path)
 
     log.debug("Creating [green]pyproject.toml[/green]")
     construct_default_pyproject_toml(
