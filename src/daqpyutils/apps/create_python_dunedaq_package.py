@@ -21,7 +21,7 @@ template_variables: dict[str, str | bool] = {}
 
 def summary_logging(package_name: str, needs_description: bool) -> None:
     """
-    Log future actions to comission the created package into the DUNE-DAQ organization.
+    Log future actions to commission the created package into the DUNE-DAQ organization.
 
     Summarize the package creation, and the remaining tasks required to integrate the
     package with the DUNE-DAQ github oragnization.
@@ -37,30 +37,18 @@ def summary_logging(package_name: str, needs_description: bool) -> None:
     Raises:
         None
     """
-    log.warning(
-        "[green]You have successfully created your package %s[/green]. To publish "
-        "it, you need to:",
-        package_name,
-    )
-    log.warning(
-        "\tAssign an appropriate [bold green]version number[/bold green] in the "
-        "pyproject.toml"
-    )
-    log.warning(
-        "\t[bold green]'git push`[/bold green] to remote in your private github, and "
-        "set up a new remote if you haven't already"
-    )
-    log.warning("\tCreate a pull request for your changes.")
-    log.warning("\tSet up your pytest-cov key.")
     if needs_description:
         log.warning(
             "\tAdd a [bold green]package description[/bold green] in the pyproject.toml"
         )
-    log.warning(
-        "\tGet in touch with John Freeman and Andrew Mogan for review before they "
-        "include it in the DUNEDAQ organization."
-    )
 
+    log.info(
+        "[yellow]You have successfully created"
+        "\nyour package %s. For next steps, please look at the \"What to Do"
+        "\nAfter Running the Command\" section of the documentation at"
+        "\nhttps://dune-daq-sw.readthedocs.io/en/latest/packages/daqpyutils/[/yellow]",
+        package_name,
+    )
 
 @click.command(context_settings={"help_option_names": ["-h", "--help"]})
 @click.argument("package-name", nargs=1, type=str)
@@ -77,7 +65,7 @@ def summary_logging(package_name: str, needs_description: bool) -> None:
     "requirements_tuple",
     type=str,
     multiple=True,
-    help="Define requiements for the pyproject.toml as e.g. 'click'",
+    help="Add a required package in the pyproject.toml (e.g. 'click')",
 )
 @click.option(
     "-rf",
@@ -86,7 +74,8 @@ def summary_logging(package_name: str, needs_description: bool) -> None:
     type=str,
     multiple=False,  # If multiple are used in CLI, only the last instance is used.
     help=(
-        "Define requiements for the pyproject.toml by pointing to a requirements file "
+        "Define multiple required packages in the pyproject.toml"
+        " by pointing to a requirements file "
         "(e.g. requirements.txt)."
     ),
 )
@@ -117,7 +106,8 @@ def summary_logging(package_name: str, needs_description: bool) -> None:
     help="Package description for the pyproject.toml.",
 )
 @click.option(
-    "-s", "--strict", is_flag=True, help="Strict mode. Recommended for production code."
+    "-s", "--strict", is_flag=True,
+    help="Strict mode. Adds extra tooling and constraints for the power developer."
 )
 def main(
     package_name: str,
@@ -155,9 +145,8 @@ def main(
     # Perform the common checks on the package name and path
     if package_name == ".":
         log.error(
-            "You passed '.' as the name of the package, which is not a valid package "
-            "name. Perhaps you meant to use the tool [green]"
-            "validate_python_dunedaq_package_structure[/]?"
+            "You passed '.' as the name of the package,"
+            " which is not a valid package name."
         )
         sys.exit(1)
     package_path = Path.cwd() / package_name

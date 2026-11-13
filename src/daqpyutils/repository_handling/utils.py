@@ -1,3 +1,4 @@
+import datetime
 import re
 import shutil
 import sys
@@ -47,7 +48,7 @@ def validate_package(package_name: str) -> bool:
         url = f"https://pypi.org/pypi/{package_name}/json"
         response = requests.get(url, timeout=1)
         if response.status_code == 200:
-            log.info("Package '%s' exists on PyPI.", package_name)
+            log.debug("Package '%s' exists on PyPI.", package_name)
             return True
     except requests.exceptions.ConnectionError:
         log.exception(
@@ -90,7 +91,7 @@ def item_is_formatted_with_version(item: str) -> bool:
     Raises:
         None
     """
-    return bool(re.match(r"^[a-zA-Z0-9_-]+==\d+\.\d+\.\d+$", item))
+    return bool(re.match(r"^[a-zA-Z0-9_-]+==[^=].*$", item))
 
 
 def item_is_formatted_in_kebab_case(item: str) -> bool:
@@ -335,7 +336,7 @@ def unpack_items(
 
     # If a file is provided, parse its contents and add them to the list
     if items_file:
-        log.info("Commencing parsing the contents of %s to list", items_file)
+        log.debug("Commencing parsing the contents of %s to list", items_file)
 
         # Validate that the file exists
         items_path = Path(items_file)
@@ -366,8 +367,8 @@ def validate_compliance_with_naming_conventions(
     """Validate the package names."""
     if package_name == ".":
         log.error(
-            "You passed '.' as the name of the package. Perhaps you meant to use the "
-            "tool validate_python_dunedaq_package_structure?"
+            "You passed '.' as the name of the package, "
+            "which is not a valid package name."
         )
         sys.exit(1)
     if not re.fullmatch(r"[a-zA-Z][a-zA-Z0-9]*", package_name):
@@ -397,8 +398,12 @@ def setup_dot_git(package_path: Path) -> None:
     If it already exists, checks if it is correctly structured.
     If it doesn't exist, it gets written.
     """ 
-    log.info("Setting up the .git repository.")
-    Repo.init(package_path, mkdir=True)
+    log.debug("Setting up the .git repository.")
+    repo = Repo.init(package_path, mkdir=True)
+
+    if not repo.head.is_valid():
+        repo.git.checkout("-b", "develop")
+
     return
 
 
@@ -413,7 +418,7 @@ def make_subdirs(package_path: Path, applications: list[str]) -> None:
         create_subdirs.append(package_path / "src" / package_name / "apps")
     for subdir in create_subdirs:
         if not subdir.exists():
-            log.info("Generating directory %s", subdir)
+            log.debug("Generating directory %s", subdir)
             subdir.mkdir(parents=True)
     return
 
@@ -430,7 +435,7 @@ def populate_template(
     log.debug("Populating template [green]%s[/green]", template_file_path.name)
     with open(output_path, "w") as output_file:
         output_file.write(result)
-    log.info(
+    log.debug(
         "File [green]%s[/green] written to [purple]%s[/purple].",
         output_path.name,
         output_path,
@@ -444,7 +449,7 @@ def copy_template(file_name: Path | str, output_path: Path) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     log.debug("Copying template [green]%s[/green]", file_name)
     shutil.copy(template_file_path, output_path)
-    log.info(
+    log.debug(
         "File [green]%s[/green] written to [purple]%s[/purple].",
         output_path.name,
         output_path,
@@ -455,7 +460,11 @@ def copy_template(file_name: Path | str, output_path: Path) -> None:
 def construct_default_readme_md(package_path: Path, description: str) -> None:
     """Construct the default docs/README.md with the package name and description."""
     output_file = package_path / "docs" / "README.md"
-    template_variables = {"PACKAGE_NAME": package_path.name, "DESCRIPTION": description}
+    ds = datetime.datetime.now().astimezone().strftime("%a %b %-d %H:%M:%S %Z %Y")
+    generation_blurb = f"# No Official User Documentation Has Been Written Yet, {ds}"
+    template_variables = {"PACKAGE_NAME": package_path.name,
+                          "DESCRIPTION": description,
+                          "GENERATION_BLURB": generation_blurb }
     populate_template(template_path / "readme.jinja", template_variables, output_file)
     return
 
@@ -467,47 +476,29 @@ def construct_default_gitignore(package_path: Path) -> None:
 
 
 def construct_default_dot_github(package_path: Path) -> None:
-    """Construct the default .github/workflows/*.yml with the default CI workflows."""
+    """Construct the minimal set of workflows DUNE-DAQ repos should have."""
     # Setup the default path
     template_dot_github_dir = template_path / "github"
 
     # Copy the workflow files to the destination
     template_workflow_dir = template_dot_github_dir / "workflows"
     workflow_files = [
-        template_workflow_dir / file.name
-        for file in template_workflow_dir.iterdir()
-        if file.is_file() and file.name != "__init__.py"
+        template_workflow_dir / filename
+        for filename in ["track_new_prs.yml", "track_new_issues.yml"]
     ]
-    log.critical("workflow_files: %s", workflow_files)
     destination = package_path / ".github" / "workflows"
     for file in workflow_files:
         copy_template(file, destination / file.name)
 
-    # Copy the issue template files to the destination
-    template_issue_template_dir = template_dot_github_dir / "ISSUE_TEMPLATE"
-    issue_template_files = [
-        template_issue_template_dir / file.name
-        for file in template_issue_template_dir.iterdir()
-        if file.is_file() and file.name != "__init__.py"
-    ]
-    log.critical("issue_template_files: %s", issue_template_files)
-    destination = package_path / ".github" / "ISSUE_TEMPLATE"
-    for file in issue_template_files:
-        copy_template(file, destination / file.name)
-
-    # Copy the pull request template files to the destination
-    template_pull_request_template_path = (
-        template_dot_github_dir / "pull_request_template.md"
-    )
-    destination = package_path / ".github" / "pull_request_template.md"
-    copy_template(template_pull_request_template_path, destination)
-
-    log.info("GitHub workflows copied to %s", destination)
     return
 
 
+# JCF, Nov-10-2026: this function is disabled until we come up with a formal
+# standard for pre-commit hooks in Python development
+
 def construct_default_pre_commit_config_yaml(package_path: Path) -> None:
     """Construct the default .pre-commit-config.yaml with all pre-commit actions."""
+    pass
     copy_template("pre-commit-config.jinja", package_path / ".pre-commit-config.yaml")
     return
 
@@ -536,7 +527,7 @@ def parse_applications(package_path: Path, applications: list[str]) -> str:
             replace_file_path_with_dot_scope_notation(application_path) + ":main"
         )
         template_entry_points += f'{application} = "{application_entry_point}"\n'
-        log.info("Added application %s to pyproject.toml", application)
+        log.debug("Added application %s to pyproject.toml", application)
 
     return template_entry_points.rstrip("\n")
 
@@ -601,7 +592,7 @@ def construct_default_pyproject_toml(
         template_variables["APPLICATIONS"] = parse_applications(
             package_path, applications
         )
-        log.info("Added all script entry points")
+        log.debug("Added all script entry points")
 
     if requirements:
         requirements_str = "\n".join(f'\t"{pkg}",' for pkg in requirements)
@@ -622,10 +613,10 @@ def construct_inits(package_path: Path) -> None:
     ]
     directories.append(package_path / "src" / package_path.name)
     for directory in directories:
-        log.error("%s", directory)
         for exclusion_path in ["integtest", "github"]:
             if exclusion_path in str(directory):
                 continue
+        log.debug("Creating __init__.py file in %s", directory)
         file = directory / "__init__.py"
         file.touch()
     return
@@ -647,9 +638,6 @@ def make_files(
 
     log.debug("Creating [green].github/workflows[/green]")
     construct_default_dot_github(package_path)
-
-    log.debug("Creating [green].pre-commit-config.yaml[/green]")
-    construct_default_pre_commit_config_yaml(package_path)
 
     log.debug("Creating [green]pyproject.toml[/green]")
     construct_default_pyproject_toml(
