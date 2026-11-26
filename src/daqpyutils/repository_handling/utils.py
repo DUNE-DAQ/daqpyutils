@@ -3,6 +3,7 @@ import re
 import shutil
 import sys
 from collections.abc import Mapping
+from http import HTTPStatus
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 
@@ -47,7 +48,7 @@ def validate_package(package_name: str) -> bool:
     try:
         url = f"https://pypi.org/pypi/{package_name}/json"
         response = requests.get(url, timeout=1)
-        if response.status_code == 200:
+        if response.status_code == HTTPStatus.OK:
             log.debug("Package '%s' exists on PyPI.", package_name)
             return True
     except requests.exceptions.ConnectionError:
@@ -388,7 +389,6 @@ def validate_compliance_with_naming_conventions(
                 application,
             )
             sys.exit(1)
-    return
 
 
 def setup_dot_git(package_path: Path) -> None:
@@ -404,7 +404,6 @@ def setup_dot_git(package_path: Path) -> None:
     if not repo.head.is_valid():
         repo.git.checkout("-b", "develop")
 
-    return
 
 
 def make_subdirs(package_path: Path, applications: list[str]) -> None:
@@ -420,7 +419,6 @@ def make_subdirs(package_path: Path, applications: list[str]) -> None:
         if not subdir.exists():
             log.debug("Generating directory %s", subdir)
             subdir.mkdir(parents=True)
-    return
 
 
 def populate_template(
@@ -440,7 +438,6 @@ def populate_template(
         output_path.name,
         output_path,
     )
-    return
 
 
 def copy_template(file_name: Path | str, output_path: Path) -> None:
@@ -454,7 +451,6 @@ def copy_template(file_name: Path | str, output_path: Path) -> None:
         output_path.name,
         output_path,
     )
-    return
 
 
 def construct_default_readme_md(package_path: Path, description: str) -> None:
@@ -466,13 +462,11 @@ def construct_default_readme_md(package_path: Path, description: str) -> None:
                           "DESCRIPTION": description,
                           "GENERATION_BLURB": generation_blurb }
     populate_template(template_path / "readme.jinja", template_variables, output_file)
-    return
 
 
 def construct_default_gitignore(package_path: Path) -> None:
     """Construct the default .gitignore with the default ignore dirs and files."""
     copy_template("gitignore.jinja", package_path / ".gitignore")
-    return
 
 
 def construct_default_dot_github(package_path: Path) -> None:
@@ -490,7 +484,6 @@ def construct_default_dot_github(package_path: Path) -> None:
     for file in workflow_files:
         copy_template(file, destination / file.name)
 
-    return
 
 
 # JCF, Nov-10-2026: this function is disabled until we come up with a formal
@@ -500,7 +493,6 @@ def construct_default_pre_commit_config_yaml(package_path: Path) -> None:
     """Construct the default .pre-commit-config.yaml with all pre-commit actions."""
     pass
     copy_template("pre-commit-config.jinja", package_path / ".pre-commit-config.yaml")
-    return
 
 
 def construct_application_file(application: str, application_path: Path) -> None:
@@ -509,7 +501,6 @@ def construct_application_file(application: str, application_path: Path) -> None
     populate_template(
         template_path / "application.jinja", template_variables, application_path
     )
-    return
 
 
 def parse_applications(package_path: Path, applications: list[str]) -> str:
@@ -569,7 +560,7 @@ def replace_file_path_with_dot_scope_notation(file_path: str) -> str:
     Raises:
         None
     """
-    return file_path.rstrip(".py").replace("/", ".")
+    return file_path.removesuffix(".py").replace("/", ".")
 
 
 def construct_default_pyproject_toml(
@@ -603,7 +594,6 @@ def construct_default_pyproject_toml(
     populate_template(
         template_path / "pyproject.jinja", template_variables, output_file
     )
-    return
 
 
 def construct_inits(package_path: Path) -> None:
@@ -619,7 +609,6 @@ def construct_inits(package_path: Path) -> None:
         log.debug("Creating __init__.py file in %s", directory)
         file = directory / "__init__.py"
         file.touch()
-    return
 
 
 def make_files(
@@ -646,4 +635,3 @@ def make_files(
 
     log.debug("Creating __init__.py files")
     construct_inits(package_path)
-    return

@@ -114,30 +114,33 @@ def test_ingest_item_list() -> None:
     """Test the ingest_item_list function with a list of items."""
     # Test parsing requirements
     test_requirement = ["daqpyutils==1.0.0", "numpy==1.21.0", "scipy"]
+    requirement_count = len(test_requirement)
     ingested_requirements = ingest_item_list("requirements", test_requirement)
-    assert len(ingested_requirements) == 3
+    assert len(ingested_requirements) == requirement_count
     assert ingested_requirements[0] == "daqpyutils"
     assert ingested_requirements[1] == "numpy"
     assert ingested_requirements[2] == "scipy"
 
     # Test parsing applications
     test_applications = ["create-python-dunedaq-package", "another-application"]
+    application_count = len(test_applications)
     ingested_applications = ingest_item_list("applications", test_applications)
-    assert len(ingested_applications) == 2
+    assert len(ingested_applications) == application_count
     assert ingested_applications[0] == "create-python-dunedaq-package"
     assert ingested_applications[1] == "another-application"
 
     # Test parsing non-existent applications
     with pytest.raises(SystemExit):
-        ingest_item_list("application", ["non-existent-application"])
+        ingest_item_list("applications", ["non-existent-application"])
 
 
 def test_unpack_items() -> None:
     """Test the unpack_items function with a list of items."""
     # Test ingesting a list of requirements
     test_requirements = ["daqpyutils==1.0.0", "numpy==1.21.0", "scipy"]
+    requirement_count = len(test_requirements)
     unpacked_items = unpack_items("requirements", items=test_requirements)
-    assert len(unpacked_items) == 3
+    assert len(unpacked_items) == requirement_count
     assert unpacked_items[0] == "daqpyutils"
     assert unpacked_items[1] == "numpy"
     assert unpacked_items[2] == "scipy"
@@ -145,12 +148,13 @@ def test_unpack_items() -> None:
     with tempfile.NamedTemporaryFile(delete=True) as temp_file:
         # Test ingesting a requirements file only with empty lines and comments
         temp_file.write(b"daqpyutils==1.0.0\nnumpy==1.21.0\n#scipy\n")
+        requirement_count = 2
         temp_file.seek(0)
         temp_file_path = temp_file.name
         unpacked_items_from_file = unpack_items(
             "requirements", items_file=temp_file_path
         )
-        assert len(unpacked_items_from_file) == 2
+        assert len(unpacked_items_from_file) == requirement_count
         assert unpacked_items_from_file[0] == "daqpyutils"
         assert unpacked_items_from_file[1] == "numpy"
         assert "scipy" not in unpacked_items_from_file
@@ -160,7 +164,7 @@ def test_unpack_items() -> None:
         all_unpacked_items = unpack_items(
             "requirements", items=requirements_list, items_file=temp_file_path
         )
-        assert len(all_unpacked_items) == 3
+        assert len(all_unpacked_items) == requirement_count + 1
         assert all_unpacked_items[0] == "matplotlib"
         assert all_unpacked_items[1] == "daqpyutils"
         assert all_unpacked_items[2] == "numpy"
@@ -192,7 +196,8 @@ def test_unpack_items() -> None:
     # Test ingesting a list of applications
     test_applications = ["create-python-dunedaq-package", "another-application"]
     unpacked_applications = unpack_items("applications", items=test_applications)
-    assert len(unpacked_applications) == 2
+    application_count = len(test_applications)
+    assert len(unpacked_applications) == application_count
     assert unpacked_applications[0] == "create-python-dunedaq-package"
     assert unpacked_applications[1] == "another-application"
 

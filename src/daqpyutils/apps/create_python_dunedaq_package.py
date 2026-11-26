@@ -109,7 +109,7 @@ def summary_logging(package_name: str, needs_description: bool) -> None:
     "-s", "--strict", is_flag=True,
     help="Strict mode. Adds extra tooling and constraints for the power developer."
 )
-def main(
+def main( # noqa: PLR0917, PLR0913
     package_name: str,
     log_level: str,
     requirements_tuple: tuple[str],
@@ -164,9 +164,16 @@ def main(
 
     # Unpack the requirements and applications from the files if provided
     applications = unpack_items("applications", applications, applications_file)
-    log.info("Applications to be created: %s", applications)
+    if applications:
+        log.info("Applications to be created: %s", applications)
+    else:
+        log.info("No applications have been specified for creation.")
+
     requirements = unpack_items("requirements", requirements, requirements_file)
-    log.info("Requirements to be added to pyproject.toml: %s", requirements)
+    if requirements:
+        log.info("Requirements to be added to pyproject.toml: %s", requirements)
+    else:
+        log.info("No requirements have been specified for addition to pyproject.toml.")
 
     # Validate the package name and application names against the naming conventions
     validate_compliance_with_naming_conventions(package_name, applications)
@@ -186,7 +193,6 @@ def main(
     log.debug("Subdirectories created in %s", package_path)
     make_files(package_path, requirements, applications, package_description, strict)
     summary_logging(package_name, needs_description)
-    return
 
 
 if __name__ == "__main__":

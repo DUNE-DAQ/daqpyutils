@@ -186,6 +186,7 @@ Rules:
  - `UP` - `pyupgrade`: suggestions for code modernization
  - `RUF` - `ruff`-specific rules: built-in Ruff-specific warnings
  - `ANN` - `flake8-annotations`: check for missing type annotations
+ - `PLR` - `pylint` refactoring
 
 Ignore rules:
  - `D100` - Documentation existence - Every package needs a summary at the top of the module/file.
