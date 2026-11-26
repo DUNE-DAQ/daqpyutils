@@ -27,6 +27,7 @@ dev = [
   "ruff",
   "pre-commit",
   "types-requests",
+  "types-pytz",
 ]
 test = [
   "pytest",
@@ -34,6 +35,7 @@ test = [
   "pytest-cov",
   "types-requests",
   "ruff",
+  "types-pytz",
 ]
 
 [project.scripts]
