@@ -569,7 +569,7 @@ def replace_file_path_with_dot_scope_notation(file_path: str) -> str:
     Raises:
         None
     """
-    return file_path.rstrip(".py").replace("/", ".")
+    return file_path.removesuffix(".py").replace("/", ".")
 
 
 def construct_default_pyproject_toml(

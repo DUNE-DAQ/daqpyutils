@@ -164,9 +164,16 @@ def main(
 
     # Unpack the requirements and applications from the files if provided
     applications = unpack_items("applications", applications, applications_file)
-    log.info("Applications to be created: %s", applications)
+    if applications:
+        log.info("Applications to be created: %s", applications)
+    else:
+        log.info("No applications have been specified for creation.")
+
     requirements = unpack_items("requirements", requirements, requirements_file)
-    log.info("Requirements to be added to pyproject.toml: %s", requirements)
+    if requirements:
+        log.info("Requirements to be added to pyproject.toml: %s", requirements)
+    else:
+        log.info("No requirements have been specified for addition to pyproject.toml.")
 
     # Validate the package name and application names against the naming conventions
     validate_compliance_with_naming_conventions(package_name, applications)
