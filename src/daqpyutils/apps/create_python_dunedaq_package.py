@@ -109,7 +109,7 @@ def summary_logging(package_name: str, needs_description: bool) -> None:
     "-s", "--strict", is_flag=True,
     help="Strict mode. Adds extra tooling and constraints for the power developer."
 )
-def main(
+def main( # noqa: PLR0917, PLR0913
     package_name: str,
     log_level: str,
     requirements_tuple: tuple[str],
@@ -193,7 +193,6 @@ def main(
     log.debug("Subdirectories created in %s", package_path)
     make_files(package_path, requirements, applications, package_description, strict)
     summary_logging(package_name, needs_description)
-    return
 
 
 if __name__ == "__main__":

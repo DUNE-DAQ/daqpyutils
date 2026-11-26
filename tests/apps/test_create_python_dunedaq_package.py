@@ -60,9 +60,9 @@ def test_create_this_package() -> None:
     assert "You passed '.' as the name of the package, which is not a valid package name" in output
 
 
-def test_create_a_package_and_validate(tmp_path: Path) -> None:
+def test_create_a_package(tmp_path: Path) -> None: # noqa: PLR0915
     """
-    Test function create_a_package_and_validate.
+    Test function create_python_dunedaq_package.
 
     Test that a test repository can be generated, is pip installable, has runnable
     applications, and that it passes all the checks.
