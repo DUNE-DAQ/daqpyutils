@@ -23,6 +23,14 @@ dev = [
   "pytest-mypy",
   {%- endif %}
 ]
+test = [
+  "pytest",
+  "pytest-cov",
+  "ruff",
+  {% if STRICT -%}
+  "pytest-mypy",
+  {%- endif %}
+]
 
 {% if APPLICATIONS -%}
 [project.scripts]
@@ -66,7 +74,7 @@ select = [
   "UP",     # pyupgrade: suggestions for code modernization
   "RUF",    # Ruff-specific rules: built-in Ruff-specific warnings
   "ANN",    # flake8-annotations: check for missing type annotations
-  "R",      # refactoring suggestions
+  "PLR",    # refactoring suggestions
 {% if STRICT %}
   "S",      # flake8-bandit: check for common security issues
   "N",      # pep8-naming: check for PEP 8 naming conventions
@@ -78,7 +86,7 @@ select = [
   "ISC",    # flake8-implicit-str-concat: detect implicit string concatenation
   "G",      # flake8-logging-format: ensure proper logging format strings
   "TRY",    # tryceratops: prevent abuse of try/except blocks
-  "T",      # flake8-debugger: catch tracepoints or debugger calls
+  "T10",    # flake8-debugger: catch tracepoints or debugger calls
 {% endif -%}
 ]
 
